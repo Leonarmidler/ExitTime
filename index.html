@@ -32,14 +32,10 @@
             border: 1px solid #ddd;
         }
         /* Stili CSS per allineare e stile dei pulsanti radio */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
         .radio-container {
             display: inline-block;
-            margin: 5px;
+            margin-left: -3px;
+            margin-top: 5px;
         }
         .radio-container input[type="radio"] {
             display: none;
@@ -48,11 +44,30 @@
             display: inline-block;
             padding: 10px 20px;
             background-color: #fff;
-            border: 2px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 8px;
             cursor: pointer;
         }
         .radio-container input[type="radio"]:checked + label {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        .plus-minus-container {
+            display: inline-block;
+            margin-top: 5px;
+        }
+        .plus-minus-container input[type="radio"] {
+            display: none;
+        }
+        .plus-minus-container label {
+            display: inline-block;
+            padding: 5px 8px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .plus-minus-container input[type="radio"]:checked + label {
             background-color: #4CAF50;
             color: #fff;
         }
@@ -82,7 +97,17 @@
             <input type="time" id="ingresso" required>
 
             <label for="tempoEccesso">Tempo in Eccesso:</label>
-            <input type="time" id="tempoEccesso" value="00:00">
+            <div>
+                <div class="plus-minus-container">
+                    <input type="radio" id="plus" name="tempoEccesso" value="plus" checked>
+                    <label for="plus">+</label>
+                </div>
+                <input type="time" id="tempoEccesso" value="00:00">
+                <div class="plus-minus-container">
+                    <input type="radio" id="minus" name="tempoEccesso" value="minus">
+                    <label for="minus">-</label>
+                </div>
+            </div>
 
             <!-- Gruppo di pulsanti radio per selezionare la durata del pranzo -->
             <label>Durata pausa pranzo:</label>
@@ -144,13 +169,13 @@
             var durataLavoro = 8 * 60 * 60 * 1000; // 8 ore in millisecondi
 
             var durataPranzo;
-            if (uscitaPranzo && entrataPranzo) {
+            var selectedOption = document.querySelector('input[name="lunchDuration"]:checked').value;
+            if (selectedOption == 'pranzo_fuori' && uscitaPranzo && entrataPranzo) {
                 var orarioUscitaPranzo = new Date('1970-01-01 ' + uscitaPranzo);
                 var orarioEntrataPranzo = new Date('1970-01-01 ' + entrataPranzo);
                 durataPranzo = orarioEntrataPranzo - orarioUscitaPranzo;
             } else {
                 // Ottenere la durata del pranzo in base all'opzione selezionata
-                var selectedOption = document.querySelector('input[name="lunchDuration"]:checked').value;
                 if (selectedOption === '45') {
                     durataPranzo = 45 * 60 * 1000; // 45 minuti
                 } else if (selectedOption === '30') {
@@ -161,7 +186,11 @@
             }
 
             var tempoEccessoParts = tempoEccesso.split(':');
-            var tempoEccessoMs = (+tempoEccessoParts[0]) * 60 * 60 * 1000 + (+tempoEccessoParts[1]) * 60 * 1000;
+            if (document.querySelector('input[name="tempoEccesso"]:checked').value == 'plus') {
+                var tempoEccessoMs = (+tempoEccessoParts[0]) * 60 * 60 * 1000 + (+tempoEccessoParts[1]) * 60 * 1000;
+            } else {
+                var tempoEccessoMs = (-tempoEccessoParts[0]) * 60 * 60 * 1000 + (-tempoEccessoParts[1]) * 60 * 1000;
+            }
 
             var orarioUscita = new Date(orarioIngresso.getTime() + durataLavoro + durataPranzo - tempoEccessoMs);
 
