@@ -25,11 +25,36 @@
             display: block;
             margin: 10px 0 5px;
         }
-        input {
+        input[type="time"] {
             margin: 5px 0;
             padding: 10px;
             border-radius: 3px;
             border: 1px solid #ddd;
+        }
+        /* Stili CSS per allineare e stile dei pulsanti radio */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .radio-container {
+            display: inline-block;
+            margin: 5px;
+        }
+        .radio-container input[type="radio"] {
+            display: none;
+        }
+        .radio-container label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .radio-container input[type="radio"]:checked + label {
+            background-color: #4CAF50;
+            color: #fff;
         }
         button {
             display: block;
@@ -59,13 +84,29 @@
             <label for="tempoEccesso">Tempo in Eccesso:</label>
             <input type="time" id="tempoEccesso" value="00:00">
 
-            <button type="button" id="toggleLunchTime">Pranzo fuori</button>
+            <!-- Gruppo di pulsanti radio per selezionare la durata del pranzo -->
+            <label>Durata pausa pranzo:</label>
+            <div>
+                <div class="radio-container">
+                    <input type="radio" id="radio45" name="lunchDuration" value="45" checked>
+                    <label for="radio45">45'</label>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" id="radio30" name="lunchDuration" value="30">
+                    <label for="radio30">30'</label>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" id="radioPranzoFuori" name="lunchDuration" value="pranzo_fuori">
+                    <label for="radioPranzoFuori">Pranzo Fuori</label>
+                </div>
+            </div>
 
+            <!-- Sezione per il pranzo fuori, inizialmente nascosta -->
             <div id="lunchTimeFields" class="hidden">
-                <label for="uscitaPranzo">Orario di Uscita per Pranzo (opzionale):</label>
+                <label for="uscitaPranzo">Orario di Uscita per Pranzo:</label>
                 <input type="time" id="uscitaPranzo">
 
-                <label for="entrataPranzo">Orario di Entrata dopo Pranzo (opzionale):</label>
+                <label for="entrataPranzo">Orario di Entrata dopo Pranzo:</label>
                 <input type="time" id="entrataPranzo">
             </div>
 
@@ -80,9 +121,17 @@
             calcolaOrario();
         });
 
-        document.getElementById('toggleLunchTime').addEventListener('click', function() {
-            var lunchFields = document.getElementById('lunchTimeFields');
-            lunchFields.classList.toggle('hidden');
+        // Event listener per il cambiamento del valore dei pulsanti radio
+        var radioButtons = document.querySelectorAll('input[type="radio"][name="lunchDuration"]');
+        radioButtons.forEach(function(radioButton) {
+            radioButton.addEventListener('change', function() {
+                var selectedOption = this.value;
+                if (selectedOption === 'pranzo_fuori') {
+                    document.getElementById('lunchTimeFields').classList.remove('hidden');
+                } else {
+                    document.getElementById('lunchTimeFields').classList.add('hidden');
+                }
+            });
         });
 
         function calcolaOrario() {
@@ -100,7 +149,15 @@
                 var orarioEntrataPranzo = new Date('1970-01-01 ' + entrataPranzo);
                 durataPranzo = orarioEntrataPranzo - orarioUscitaPranzo;
             } else {
-                durataPranzo = 45 * 60 * 1000; // Imposta una pausa pranzo di default di 45 minuti
+                // Ottenere la durata del pranzo in base all'opzione selezionata
+                var selectedOption = document.querySelector('input[name="lunchDuration"]:checked').value;
+                if (selectedOption === '45') {
+                    durataPranzo = 45 * 60 * 1000; // 45 minuti
+                } else if (selectedOption === '30') {
+                    durataPranzo = 30 * 60 * 1000; // 30 minuti
+                } else {
+                    durataPranzo = 0; // Nessun pranzo
+                }
             }
 
             var tempoEccessoParts = tempoEccesso.split(':');
