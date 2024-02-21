@@ -20,7 +20,7 @@ function calcolaOrario() {
     var ingresso = document.getElementById("ingresso").value;
     var uscitaPranzo = document.getElementById("uscitaPranzo").value;
     var entrataPranzo = document.getElementById("entrataPranzo").value;
-    var tempoEccesso = document.getElementById("tempoEccesso").value;
+    var tempoRecupero = document.getElementById("tempoRecupero").value;
 
     var orarioIngresso = new Date('1970-01-01 ' + ingresso);
     var durataLavoro = 8 * 60 * 60 * 1000; // 8 ore in millisecondi
@@ -42,14 +42,14 @@ function calcolaOrario() {
         }
     }
 
-    var tempoEccessoParts = tempoEccesso.split(':');
-    if (document.querySelector('input[name="tempoEccesso"]:checked').value == 'plus') {
-        var tempoEccessoMs = (+tempoEccessoParts[0]) * 60 * 60 * 1000 + (+tempoEccessoParts[1]) * 60 * 1000;
+    var tempoRecuperoParts = tempoRecupero.split(':');
+    if (document.querySelector('input[name="tempoRecupero"]:checked').value == 'plus') {
+        var tempoRecuperoMs = (+tempoRecuperoParts[0]) * 60 * 60 * 1000 + (+tempoRecuperoParts[1]) * 60 * 1000;
     } else {
-        var tempoEccessoMs = (-tempoEccessoParts[0]) * 60 * 60 * 1000 + (-tempoEccessoParts[1]) * 60 * 1000;
+        var tempoRecuperoMs = (-tempoRecuperoParts[0]) * 60 * 60 * 1000 + (-tempoRecuperoParts[1]) * 60 * 1000;
     }
 
-    var orarioUscita = new Date(orarioIngresso.getTime() + durataLavoro + durataPranzo - tempoEccessoMs);
+    var orarioUscita = new Date(orarioIngresso.getTime() + durataLavoro + durataPranzo - tempoRecuperoMs);
 
     var orarioUscitaFormattato = orarioUscita.getHours().toString().padStart(2, '0') + ':' + orarioUscita.getMinutes().toString().padStart(2, '0');
 
