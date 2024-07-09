@@ -49,7 +49,7 @@ label {
     display: block;
     margin: 10px 0 5px;
 }
-input[type="time-local"] {
+input[type="time"] {
     margin: 5px 10px;
     padding: 10px;
     border-radius: 8px;
