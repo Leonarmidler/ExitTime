@@ -12,7 +12,7 @@
         <h2>Calcolatore Orario di Lavoro</h2>
         <form id="workTimeForm">
             <label for="ingresso">Orario di ingresso:</label>
-            <input type="time-local" id="ingresso" required>
+            <input type="time" id="ingresso" required>
 
             <label for="tempoRecupero" class="spacer">Tempo di recupero:</label>
             <div>
@@ -20,7 +20,7 @@
                     <input type="radio" id="plus" name="tempoRecupero" value="plus" checked> 
                     <label for="plus">+</label>
                 </div>
-                <input type="time-local" id="tempoRecupero" value="00:00">
+                <input type="time" id="tempoRecupero" value="00:00">
                 <div class="plus-minus-container">
                     <input type="radio" id="minus" name="tempoRecupero" value="minus">
                     <label for="minus">-</label>
@@ -47,10 +47,10 @@
             <!-- Sezione per il pranzo fuori, inizialmente nascosta -->
             <div id="lunchTimeFields" class="hidden">
                 <label for="uscitaPranzo" class="spacer">Orario di Uscita per Pranzo:</label>
-                <input type="time-local" id="uscitaPranzo">
+                <input type="time" id="uscitaPranzo">
 
                 <label for="entrataPranzo" class="spacer">Orario di Entrata dopo Pranzo:</label>
-                <input type="time-local" id="entrataPranzo">
+                <input type="time" id="entrataPranzo">
             </div>
 
             <button type="submit">Calcola Orario di Uscita</button>
